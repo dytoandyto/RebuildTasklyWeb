@@ -21,12 +21,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('projects', function () {
         return Inertia::render('projects');
     })->name('projects');
+    Route::get('tasks', function () {
+        return Inertia::render('tasks');
+    })->name('tasks');
+    Route::get('teams', function () {
+        return Inertia::render('teams');
+    })->name('teams');
 });
 
 Route::middleware(['auth', 'role:super-admin'])->group(function () {
-    
+
     Route::get('/permissions', [RolePermissionController::class, 'index'])->name('permissions.index');
     Route::post('/permissions/toggle', [RolePermissionController::class, 'update'])->name('permissions.toggle');
-        
 });
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';

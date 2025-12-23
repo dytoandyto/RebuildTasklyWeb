@@ -1,9 +1,9 @@
 import { Breadcrumbs } from '@/components/breadcrumbs';
-import { Search, Bell, Settings, ChevronDown } from "lucide-react";
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { type BreadcrumbItem as BreadcrumbItemType } from '@/types';
-import { Input } from "./ui/input";
+import { Bell, Search, Settings } from "lucide-react";
 import { NavUser } from './nav-user';
+import { Input } from "./ui/input";
 
 export function AppSidebarHeader({
     breadcrumbs = [],
@@ -11,38 +11,54 @@ export function AppSidebarHeader({
     breadcrumbs?: BreadcrumbItemType[];
 }) {
     return (
-        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between sticky top-0 z-10/50 px-6 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4">
-            {/* Bagian Kiri: Tambahkan 'flex-1' di div ini untuk memberikan ruang fleksibel */}
-            <div className="flex items-center gap-2 flex-1">
-                <SidebarTrigger className="-ml-1" />
-                <Breadcrumbs breadcrumbs={breadcrumbs} />
+        <header className="sticky top-0 z-40 flex h-16 w-full items-center justify-between border-b border-border bg-background/95 px-4 backdrop-blur-sm transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-6">
+            
+            {/* Kiri: Navigasi & Search */}
+            <div className="flex flex-1 items-center gap-4">
+                <div className="flex items-center gap-2">
+                    <SidebarTrigger className="-ml-1" />
+                    <div className="hidden h-4 w-px bg-border md:block" /> {/* Separator halus */}
+                    <Breadcrumbs breadcrumbs={breadcrumbs} />
+                </div>
                 
-                {/* Search Bar - Diberi 'flex-1' agar memanjang mengisi sisa ruang */}
-                <div className="relative flex-1 max-w-lg mx-4"> 
-                    <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                {/* Search Bar: Menggunakan variabel Sada Red untuk focus state */}
+                <div className="relative hidden flex-1 max-w-md mx-4 lg:block"> 
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground transition-colors group-focus-within:text-sada-red" />
                     <Input
                         type="text"
-                        placeholder="Search tasks, projects, or team members..."
-                        // Ubah 'w-full' agar mengisi penuh parent 'div' yang kini fleksibel
-                        className="pl-12 h-10 rounded-xl border-gray-200 bg-gray-50 focus:bg-white focus:border-purple-300 w-full" 
+                        placeholder="Search tasks, projects..."
+                        className="h-9 w-full rounded-xl border-border bg-muted/30 pl-10 text-sm transition-all focus:bg-background focus:ring-4 focus:ring-sada-red/10 focus:border-sada-red/50" 
                     />
                 </div>
             </div>
-            {/* Right Side */}
-            <div className="flex items-center gap-4 ml-6">
+
+            {/* Kanan: Actions & Profile */}
+            <div className="flex items-center gap-2 md:gap-4">
+                {/* Mobile Search Trigger (Hanya muncul di layar kecil) */}
+                <button className="flex p-2 hover:bg-muted rounded-xl transition-colors lg:hidden text-muted-foreground">
+                    <Search className="size-5" />
+                </button>
+
                 {/* Notifications */}
-                <button className="relative p-2 hover:bg-gray-100 rounded-xl transition-colors">
-                    <Bell className="w-5 h-5 text-gray-600" />
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                <button className="relative p-2 hover:bg-muted rounded-xl transition-colors text-muted-foreground hover:text-foreground">
+                    <Bell className="size-5" />
+                    <span className="absolute top-2 right-2 flex size-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sada-red opacity-75"></span>
+                        <span className="relative inline-flex rounded-full size-2 bg-sada-red"></span>
+                    </span>
                 </button>
 
                 {/* Settings */}
-                <button className="p-2 hover:bg-gray-100 rounded-xl transition-colors">
-                    <Settings className="w-5 h-5 text-gray-600" />
+                <button className="p-2 hover:bg-muted rounded-xl transition-colors text-muted-foreground hover:text-foreground hidden sm:flex">
+                    <Settings className="size-5" />
                 </button>
 
+                <div className="h-6 w-px bg-border mx-1 hidden md:block" />
+
                 {/* User Profile */}
-                <NavUser />
+                <div className="flex items-center">
+                    <NavUser />
+                </div>
             </div>
         </header>
     );

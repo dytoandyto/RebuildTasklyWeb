@@ -12,26 +12,26 @@ interface SharedProps extends Page {
     };
     [key: string]: unknown;
 }
-
 export default function AppLogo() {
     const { props } = usePage<SharedProps>();
     const { auth } = props;
 
     return (
-        <>
-            <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-                <AppLogoIcon className="size-5 fill-current text-white dark:text-black" />
+        <div className="flex items-center gap-3 overflow-hidden">
+            {/* Logo Icon Container */}
+            <div className="flex aspect-square size-10 shrink-0 items-center justify-center rounded-xl bg-sada-red text-white shadow-lg shadow-sada-red/20">
+                <AppLogoIcon className="size-10 fill-current" />
             </div>
-            <div className="ml-1 grid flex-1 text-left text-sm">
-                <span className="mb-0.5 truncate leading-tight font-semibold">
-                    {auth.user?.company?.name || 'Taskly Role Permissions'}
+
+            {/* Company Info: Otomatis tersembunyi lewat parent (Sidebar) saat collapse */}
+            <div className="grid flex-1 text-left leading-tight group-data-[collapsible=icon]:hidden">
+                <span className="truncate font-black  text-foreground">
+                    {auth.user?.company?.name || 'Sada Taskly'}
                 </span>
-                <span>
-                    <span className="text-xs text-muted-foreground">
-                        {auth.user ? 'Company' : 'No Company Selected'}
-                    </span>
+                <span className="truncate text-[10px] font-bold uppercase tracking-widest text-muted-foreground/70">
+                    {auth.user?.company ? 'Active Company' : 'Workspace'}
                 </span>
             </div>
-        </>
+        </div>
     );
 }
