@@ -1,62 +1,54 @@
 import { NavFooter } from '@/components/nav-footer';
-import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { dashboard, workspaces } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Shield } from 'lucide-react';
+import { BugIcon, Building2, ChartColumnIncreasing, Clock, FileTextIcon, FolderKanban, LayoutGrid, MessageCircleQuestionIcon, Settings, Shield, SquareCheck, Users, } from 'lucide-react';
 import AppLogo from './app-logo';
+import { NavMain, NavManagement } from './nav-main';
 
-interface SharedProps {
-    auth: {
-        user: {
-            roles?: string[];
-        };
-    };
-    [key: string]: unknown;
+
+interface NavItemWithActive extends NavItem {
+    active?: boolean;
 }
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
-
 export function AppSidebar() {
-    const { auth } = usePage<SharedProps>().props;
+    const { auth } = usePage<any>().props;
     const isSuperAdmin = auth.user?.roles?.includes('super-admin');
 
-    const mainNavItems: NavItem[] = [
-        {
-            title: 'Dashboard',
-            href: dashboard(),
-            icon: LayoutGrid,
-        },
+    const footerNavItems: NavItem[] = [
+        { title: 'Settings', href: '/settings', icon: Settings },
+        { title: 'Help & Support', href: '/support', icon: MessageCircleQuestionIcon },
+    ];
+
+    const mainNavItems: NavItemWithActive[] = [
+        { title: 'Dashboard', href: dashboard(), icon: LayoutGrid, active: true },
+        { title: 'Workspaces', href: workspaces() , icon: Building2, active: false },
+        { title: 'Projects', href: '/projects', icon: FolderKanban, active: false },
+        { title: 'Tasks', href: '/tasks', icon: SquareCheck, active: false },
+        { title: 'Teams', href: '/teams', icon: Users, active: false },
+    ];
+
+    const managementNavItems: NavItemWithActive[] = [
+        { title: 'Bug & Request', href: '/bug-request', icon: BugIcon, active: false },
+        { title: 'Timesheets', href: '/timesheets', icon: Clock, active: false },
+        { title: 'Reports', href: '/reports', icon: ChartColumnIncreasing, active: false },
+        { title: 'Invoices', href: '/invoices', icon: FileTextIcon, active: false }
     ];
 
     if (isSuperAdmin) {
-        mainNavItems.push({
-            title: 'Access Control',
-            href: '/permissions',
-            icon: Shield,
-        });
+        mainNavItems.push({ title: 'Access Control', href: '/permissions', icon: Shield, active: false });
     }
 
     return (
-        <Sidebar collapsible="icon" variant="inset">
-            <SidebarHeader>
+        <Sidebar collapsible="icon" variant="inset" className="w-64 bg-white border-r border-gray-200 flex flex-col h-screen sticky top-0 group">
+
+            <SidebarHeader className='border-b border-gray-100 p-4'>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link href={dashboard()}>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
@@ -64,13 +56,13 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
 
-            <SidebarContent>
+            <SidebarContent className="flex-1 overflow-y-auto">
                 <NavMain items={mainNavItems} />
+                <NavManagement items={managementNavItems} />
             </SidebarContent>
 
-            <SidebarFooter>
+            <SidebarFooter className='p-4 border-t border-gray-100'>
                 <NavFooter items={footerNavItems} className="mt-auto" />
-                <NavUser />
             </SidebarFooter>
         </Sidebar>
     );

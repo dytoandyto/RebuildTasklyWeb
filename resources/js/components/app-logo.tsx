@@ -26,6 +26,11 @@ export default function AppLogo() {
                 <span className="mb-0.5 truncate leading-tight font-semibold">
                     {auth.user?.company?.name || 'Taskly Role Permissions'}
                 </span>
+                <span>
+                    <span className="text-xs text-muted-foreground">
+                        {auth.user ? 'Company' : 'No Company Selected'}
+                    </span>
+                </span>
             </div>
         </>
     );

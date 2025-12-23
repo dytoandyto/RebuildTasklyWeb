@@ -15,6 +15,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+    Route::get('workspaces', function () {
+        return Inertia::render('workspaces');
+    })->name('workspaces');
+    Route::get('projects', function () {
+        return Inertia::render('projects');
+    })->name('projects');
 });
 
 Route::middleware(['auth', 'role:super-admin'])->group(function () {
@@ -23,5 +29,4 @@ Route::middleware(['auth', 'role:super-admin'])->group(function () {
     Route::post('/permissions/toggle', [RolePermissionController::class, 'update'])->name('permissions.toggle');
         
 });
-
 require __DIR__.'/settings.php';
